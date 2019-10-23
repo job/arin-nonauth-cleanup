@@ -23,8 +23,8 @@
 # ARISING IN ANY WAY OUT OF  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import ripe_proposal_2018_06
-version = ripe_proposal_2018_06.__version__
+import arin_nonauth_cleanup
+version = arin_nonauth_cleanup.__version__
 
 import codecs
 import os
@@ -55,12 +55,12 @@ install_reqs = parse_requirements('requirements.txt')
 reqs = install_reqs
 
 setup(
-    name='ripe-proposal-2018-06',
+    name='arin-nonauth-cleanup',
     version=version,
     maintainer="Job Snijders",
     maintainer_email='job@ntt.net',
-    url='https://github.com/job/ripe-proposal-2018-06',
-    description='RIPE Policy Proposal 2018-06 Analyser',
+    url='https://github.com/job/arin-nonauth-cleanup',
+    description='ARIN-NONAUTH Cleanup Analyser',
     long_description=README,
     license='BSD 2-Clause',
     keywords='rpki prefix routing networking',
@@ -74,5 +74,5 @@ setup(
         'Programming Language :: Python :: 3 :: Only'
     ],
     packages=find_packages(exclude=['tests', 'tests.*']),
-    entry_points={'console_scripts': ['ripe-proposal-2018-06 = ripe_proposal_2018_06.ripe_proposal_2018_06:main']},
+    entry_points={'console_scripts': ['arin-nonauth-cleanup = arin_nonauth_cleanup.arin_nonauth_cleanup:main']},
 )

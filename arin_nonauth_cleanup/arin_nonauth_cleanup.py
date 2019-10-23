@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# RIPE Policy Proposal 2018-06 Analyser
+# ARIN Policy Proposal 2018-06 Analyser
 #
 # Copyright (C) 2018-2019 Job Snijders <job@ntt.net>
 #
@@ -37,7 +37,7 @@ import json
 import os
 import radix
 import requests
-import ripe_proposal_2018_06
+import arin_nonauth_cleanup
 import sys
 
 
@@ -53,7 +53,7 @@ def main():
 
     parser.add_argument('-i', dest='irr', default="default", type=str,
                         help="""Location of the IRR database
-(default: https://ftp.ripe.net/ripe/dbase/split/ripe-nonauth.db.route.gz)""")
+(default: ftp://ftp.arin.net/pub/rr/arin.db)""")
 
     parser.add_argument('--afi', dest='afi', type=str, required=False,
                         default='ipv4', help="""[ ipv4 | ipv6 ]
@@ -70,7 +70,7 @@ def main():
 (default: invalid)""")
 
     parser.add_argument('-v', '--version', action='version',
-                        version='%(prog)s ' + ripe_proposal_2018_06.__version__)
+                        version='%(prog)s ' + arin_nonauth_cleanup.__version__)
 
     args = parser.parse_args()
 
@@ -85,14 +85,12 @@ def main():
     else:
         validator_export = json.load(open(args.cache, "r"))
 
-    if args.afi == "ipv4" and args.irr == "default":
-        irr_url = "https://ftp.ripe.net/ripe/dbase/split/ripe-nonauth.db.route.gz"
-    elif args.afi == "ipv6" and args.irr == "default":
-        irr_url = "https://ftp.ripe.net/ripe/dbase/split/ripe-nonauth.db.route6.gz"
+    if args.irr == "default":
+        irr_url = "ftp://ftp.arin.net/pub/rr/arin.db"
     else:
         irr_url = args.irr
 
-    if 'http' in irr_url:
+    if 'ftp' in irr_url:
         print("Downloading %s" % irr_url, file=sys.stderr)
         r = requests.get(irr_url).content
     else:
@@ -112,7 +110,10 @@ def main():
             irr_objects.append(irr_object)
             irr_object = []
         else:
-            line = line.decode('ascii')
+            try:
+                line = line.decode('ascii')
+            except UnicodeDecodeError:
+                continue
             if not line.startswith('remarks:'):
                 irr_object.append(line)
 
@@ -136,7 +137,7 @@ def main():
         res = validation_state(tree, *route)
 
         if res['state'] == "invalid" and args.state in ["invalid", "all"]:
-            print("INVALID! The %sAS%s RIPE-NONAUTH route object has conflicts:"
+            print("INVALID! The %sAS%s ARIN-NONAUTH route object has conflicts:"
                   % route)
             print("")
             for line in irr[route]:
@@ -153,12 +154,12 @@ def main():
             print("")
 
         if res['state'] == "valid" and args.state in ["valid", "all"]:
-            print("OK: RIPE-NONAUTH route object \"%sAS%s\" matches ROA %s, \
+            print("OK: ARIN-NONAUTH route object \"%sAS%s\" matches ROA %s, \
 MaxLength %s, Origin AS%s (%s)" % (*route, res['roa']['roa'], res['roa']['maxlen'],
                                   res['roa']['origin'], res['roa']['ta']))
 
         if args.state in ["unknown", "all"]:
-            print("UNKNOWN: RIPE-NONAUTH route object \"%sAS%s\" is not \
+            print("UNKNOWN: ARIN-NONAUTH route object \"%sAS%s\" is not \
 covered by any ROAs" % route)
 
 

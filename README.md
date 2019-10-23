@@ -1,20 +1,20 @@
-RIPE Policy Proposal 2018-06 Analyser
+ARIN-NONAUTH Cleanup Analyser
 =====================================
 
-A simple tool to show what RIPE-NONAUTH objects are affected by
-RIPE Policy Proposal 2018-06.
+A simple tool to show what ARIN-NONAUTH objects are affected by
+RPKI ROAs.
 
 Installation
 ------------
 
-`pip3 install ripe-proposal-2018-06`
+`pip3 install arin-nonauth-cleanup`
 
 Use
 ---
 
-`$ ripe-proposal-2018-06`
+`$ arin-nonauth-cleanup`
 
 Copyright
 ---------
 
-Copyright (c) 2018 Job Snijders <job@ntt.net>
+Copyright (c) 2019 Job Snijders <job@ntt.net>
