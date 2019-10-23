@@ -56,8 +56,8 @@ def main():
 (default: ftp://ftp.arin.net/pub/rr/arin.db)""")
 
     parser.add_argument('--afi', dest='afi', type=str, required=False,
-                        default='ipv4', help="""[ ipv4 | ipv6 ]
-(default: ipv4""")
+                        default='ipv4', help="""[ ipv4 | ipv6 | mixed ]
+(default: mixed""")
 
     parser.add_argument('-a', dest='asn', type=int, required=False,
                         default=None, help='Limit searching to this ROA Origin ASN')
